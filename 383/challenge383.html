@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    </head>
+
+    <body>
+        <div>
+            <h1>Necklace Matching</h1>
+
+            <!-- Get input from user -->
+            Word: <input type="text" id="inputString"> <br />
+            Word to compare: <input type="text" id="compareInputString" value="">
+
+            <!-- Call function to compare the two -->
+            <button onclick=CompareWords()>Check!</button>
+        </div>
+
+        <div id="answerDiv">
+        </div>
+
+        <script>
+            function CompareWords() {
+                // update input to be the first user inputted word
+                var inputBase = document.getElementById("inputString").value;
+                var inputBase = inputBase.toString().toLowerCase();
+                var input = inputBase;
+
+                // update inputToCompare to be second user inputted word
+                var inputToCompare = document.getElementById("compareInputString").value;
+                var inputToCompare = inputToCompare.toString().toLowerCase();
+                
+                // set default match and repeat vars
+                var match = false;
+                var repeat = 0;
+
+                // run through loop for each character in input value
+                for (var i = 0; i < inputBase.length; i++) {
+                    // compare first input to second input
+                    if (input == inputToCompare) {
+                        match = true;
+                    }
+
+                    // move first char to end of string in input
+                    var input = inputBase.substr(i) + inputBase.substr(0, i);
+
+                    // compare current iteration of first input to original (Bonus #1)
+                    if (input === inputBase) {
+                        repeat++;
+                    }
+                }
+
+                // update output to display results
+                document.getElementById("answerDiv").innerHTML = "Match? " + match + "<br /> Number of Repeats: " + repeat;
+            }
+        </script>
+    </body>
+
+</html>
