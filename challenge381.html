@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>#381 Yahtzee Upper Section Scoring</title>
+
+        <!-- Challenge
+            The game of Yahtzee is played by rolling five 6-sided dice, and scoring the results in a number of ways. 
+            You are given a Yahtzee dice roll, represented as a sorted list of 5 integers, each of which is between 1 and 6 inclusive. 
+            Your task is to find the maximum possible score for this roll in the upper section of the Yahtzee score card. 
+            Here's what that means.
+            For the purpose of this challenge, the upper section of Yahtzee gives you six possible ways to score a roll. 
+            1 times the number of 1's in the roll, 2 times the number of 2's, 3 times the number of 3's, and so on up to 
+            6 times the number of 6's. For instance, consider the roll [2, 3, 5, 5, 6]. If you scored this as 1's, 
+            the score would be 0, since there are no 1's in the roll. If you scored it as 2's, the score would be 2, 
+            since there's one 2 in the roll. Scoring the roll in each of the six ways gives you the six possible scores:
+            0 2 3 0 10 6
+            The maximum here is 10 (2x5), so your result should be 10.
+        -->
+       
+        <!-- Bonus
+            Efficiently handle inputs that are unsorted and much larger, both in the number of dice and in the number of sides per die. 
+            (For the purpose of this bonus challenge, you want the maximum value of some number k, 
+            times the number of times k appears in the input.)
+        -->
+    </head>
+
+    <body>
+        <h1>Yahtzee Upper Section Scoring</h1>
+        
+        <!-- User enters dice rolls, separated by a comma -->
+        <div>
+            Enter dice rolls, separated by a comma <input type="text" id="inputDiceRolls">
+        </div>
+
+        <!-- Results displayed here -->
+        <div id="resultDiv">
+        </div>
+
+        <!-- Run function to find highest possible score -->
+        <button onclick="ScoreDice()">Score!</button>
+
+        <script>
+            var diceRolls = "";
+            var diceRollsArray = [];
+
+            var currentCount = 0;
+            var currentCountTimesAppeared = 0;
+
+            var highestValue = 0;
+            var highestValueNumber = 0;
+            var highestValueTimesAppeared = 0;
+
+            function ScoreDice() {
+
+                // Get input dice rolls, convert to array of integers, and sort numerically
+                diceRolls = document.getElementById("inputDiceRolls").value;
+                SortDiceRolls(diceRolls);
+
+                // run through dice rolls and determine highest possible score
+                for (var i = 0; i < diceRollsArray.length; i++) {
+                    
+                    // if the number appeared before, add the scores together and increase the count of number of times that number has appeared
+                    if(diceRollsArray[i] == diceRollsArray[i-1]) {
+                        currentCount += diceRollsArray[i];
+                        currentCountTimesAppeared++;
+                    } 
+                    
+                    // if that number hasn't appeared before, set the counter of both current scores and number of times appeared to 
+                    // current number and 1, respectively
+                    else {
+                        currentCount = diceRollsArray[i];
+                        currentCountTimesAppeared = 1;
+                    }
+
+                    // if the current values from above are higher, update the highest possible score variable, which number, and how frequent
+                    if (currentCount > highestValue) {
+                        highestValue = currentCount;
+                        highestValueNumber = diceRollsArray[i];
+                        highestValueTimesAppeared = currentCountTimesAppeared;
+                    }
+                }
+                
+                // update output div with results
+                document.getElementById("resultDiv").innerHTML = "Highest Score Possible: " + highestValue + "<br /> Number used: " + 
+                highestValueNumber + "<br /> Number of times appeared: " + highestValueTimesAppeared;
+            }
+
+            // pulls in diceRolls input, removes spaces, converts to array, sorts numerically, and converts to integers
+            function SortDiceRolls(diceRolls) {
+                diceRolls = diceRolls.split(" ").join("");
+                diceRollsArray = diceRolls.split(',');
+                diceRollsArray.sort(function(a, b){return a-b});
+                diceRollsArray = diceRollsArray.map(Number);
+            }
+
+        </script>
+
+    </body>
+</html>
